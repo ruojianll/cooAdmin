@@ -17,11 +17,12 @@
       	templateUrl: "app/template/login_in_template.html",
       	controller: "login"
       })
-			.state("index",{
-      	url: "/index",
-      	templateUrl: "app/template/index.html",
-      	controller: "index"
-      })
+			.state("user",{
+				url: '/user',
+        templateUrl: 'app/template/user.template.html',
+        controller: 'homeCtrl'
+			})
+			
     $urlRouterProvider.otherwise('login');
   }
 
