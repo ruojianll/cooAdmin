@@ -11,10 +11,6 @@
 					<table border="" cellspacing="" cellpadding="">
 						<tr><th>id</th><th>name</th></tr>
 						<tr ng-repeat="x in all"><td ng-bind="x.id"></td><td ng-bind="x.user_name"></td></tr>
-	          			<!--<tr><td>1</td><td>lilei</td></tr>
-	          			<tr><td>1</td><td>lilei</td></tr>
-	          			<tr><td>1</td><td>lilei</td></tr>
-	          			<tr><td>1</td><td>lilei</td></tr>-->
 	          		
 					</table>
 					<ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
@@ -58,11 +54,11 @@
 	          			
 						<tr><th>id</th><th>name</th></tr>
 	     
-						<tr><td>1</td><td>lilei</td></tr>
+						<!--<tr><td>1</td><td>lilei</td></tr>
 	          			<tr><td>1</td><td>lilei</td></tr>
 	          			<tr><td>1</td><td>lilei</td></tr>
-	          			<tr><td>1</td><td>lilei</td></tr>
-	          			<tr><td>1</td><td>lilei</td></tr>
+	          			<tr><td>1</td><td>lilei</td></tr>-->
+	          			<tr ng-repeat="xx in all_2"><td ng-bind="xx.id"></td><td ng-bind="xx.name"></td></tr>
 	          		
 					</table>
 				<ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
@@ -74,7 +70,7 @@
 					<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">
 				</span>
 				<span>
-					<button>Edit</button>
+					<button ng-click="Edit()">Edit</button>
 					<button>Delete</button>
 					<button>Create</button>
 				</span>					

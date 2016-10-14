@@ -33,15 +33,30 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			}
 		);
   }
+  //获取全部人员
   apiServ.post('/api/manager/user/all').then(
   	function (data){
-  		console.log(data)
+//		console.log(data)
   		$scope.all=data;
   	},
   	function (err){
   		
   	}
-  )
+  );
+  //获取全部组织
+	apiServ.post('/api/manager/orgnization/all').then(
+		function (data_or){
+			console.log(data_or)
+			$scope.all_2=data_or;
+		},
+		function(err){
+			
+		}
+	);
+	//对组织的编辑Edit
+	$scope.Edit=function (){
+		
+	}
 	
 	
 })
