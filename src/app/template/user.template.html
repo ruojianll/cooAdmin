@@ -1,0 +1,142 @@
+<meta charset="UTF-8">
+<div class = "user_main">
+	
+	<uib-tabset active="activeForm">
+      <uib-tab index="0" heading="Users">
+        <ng-form name="nestedForm">
+          <div class="form-group">
+            <div class = "users_list">
+            	<!--leftbar-->
+				<div class = "leftbar">
+					<table border="" cellspacing="" cellpadding="">
+	          			
+						<tr><th>id</th><th>name</th></tr>
+	     
+						<tr ng-repeat="x in aUser"><td ng-bind="x.id">1</td><td ng-bind="x.user_name">lilei</td></tr>
+	          			<!--<tr><td>1</td><td>lilei</td></tr>
+	          			<tr><td>1</td><td>lilei</td></tr>
+	          			<tr><td>1</td><td>lilei</td></tr>
+	          			<tr><td>1</td><td>lilei</td></tr>-->
+	          		
+					</table>
+					<ul uib-pagination total-items="userItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+				</div>
+				<!--centerbar-->
+				<div class = "centerbar">
+					<span>
+						<b>Name</b>
+						<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">
+					</span>
+					<span>
+						<b>password</b>
+						<input class="form-control" type="text" name="" id="" value="" />
+					</span>
+					<span>
+						<button>Edit</button>
+						<button>Delete</button>
+						<button>Create</button>
+					</span>					
+				</div>
+				<!--rightbar-->
+				<div class = "rightbar">
+					
+					<table border="" cellspacing="" cellpadding="">
+	          			<tr><th>id</th><th>orgnization</th><th>operation</th></tr>
+	          			<tr><td>1</td><td>1231</td><td><em class = "glyphicon glyphicon-remove"></em></td></tr>
+	          		</table>
+					<span>
+						<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button class="input btn btn-default">Add</button>
+					</span>						
+				</div>
+			</div>    	
+          </div>
+        </ng-form>
+      </uib-tab>
+      <uib-tab index="1" heading="Orgniations">
+        <div class = "users_list">
+        	<!--leftbar-->
+			<div class = "leftbar">
+				<table border="" cellspacing="" cellpadding="">
+	          			
+						<tr><th>id</th><th>name</th></tr>
+	     
+						<tr ng-repeat="x in aOrgnization"><td ng-bind="x.id">1</td><td ng-bind="x.name">lilei</td></tr>
+	          		
+					</table>
+				<ul uib-pagination total-items="orgnizationItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+			</div>
+			<!--centerbar-->
+			<div class = "centerbar">
+				<span>
+					<b>Name</b>
+					<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">
+				</span>
+				<span>
+					<button>Edit</button>
+					<button>Delete</button>
+					<button>Create</button>
+				</span>					
+			</div>
+			<!--rightbar-->
+			<div class = "rightbar">
+				<table border="" cellspacing="" cellpadding="">
+	          			<tr><th>id</th><th>user name</th><th>operation</th></tr>
+	          			<tr><td>1</td><td>lilei</td><td><em class = "glyphicon glyphicon-remove"></em></td></tr>
+	          		</table>
+				<span>
+					<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button class="btn btn-default">Add</button>
+				</span>					
+			</div>
+		</div>    	
+      </uib-tab>
+      <uib-tab index="2" heading="Boards">
+         <div class = "boards_list">
+        	<!--leftbar-->
+			<div class = "boards_left">
+				<table border="" cellspacing="" cellpadding="">
+          			<tr>
+          				<th>id</th>
+          				<th>name</th>
+          				<th>type</th>
+          				<th>owner</th>
+          			</tr>
+          			<tr>
+          				<td>1</td>
+          				<td>board</td>
+          				<td>personal</td>
+          				<td>whaha</td>
+          			</tr>
+          		</table>
+          		<ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+			</div>
+			<!--centerbar-->
+			<div class = "boards_center">
+				<table border="" cellspacing="" cellpadding="">
+          			<tr>
+          				<th>id</th>
+          				<th>name</th>
+          			</tr>
+          			<tr>
+          				<td>1</td>
+          				<td>1</td>
+          			</tr>
+          		</table>	
+          		<ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+			</div>
+			<!--rightbar-->
+			<div class = "boards_right">
+				<a href="javascript:;"><img src ="../../assets/images/bootstrap.png"/></a>
+				<span>新文本</span>
+				<span>新文本</span>
+				<span>新文本</span>
+				<span>新文本</span>
+				
+			</div>
+		</div>    
+      </uib-tab>
+    </uib-tabset>
+
+	
+</div>
+
+ 
