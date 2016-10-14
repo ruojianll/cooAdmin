@@ -1,19 +1,19 @@
 angular.module("cooAdmin").controller("login",function($scope,apiServ,environment,accountServ,$state){
-//	  var _selected;
-//	  $scope.selected = undefined;
-//	  $scope.states = [];
-//	  //获取所有用户
-//		apiServ.post("/api/manager/user/all",{}).then(
-//				function(data){
-//						for(var x in data){
-//							$scope.states.push(data[x].user_name)
-//						}
-//						console.log($scope.states)
-//				},
-//				function(err){
-//						console.log("cuowu")
-//				}
-//		)
+	  var _selected;
+	  $scope.selected = undefined;
+	  $scope.states = [];
+	  //获取所有用户
+		apiServ.post("/api/manager/user/all",{}).then(
+				function(data){
+						for(var x in data){
+							$scope.states.push(data[x].user_name)
+						}
+						console.log($scope.states)
+				},
+				function(err){
+						console.log("cuowu")
+				}
+		)
 		$scope.click = function(){
 			accountServ.login($scope.user_name,$scope.password).then(
 				function(data){
