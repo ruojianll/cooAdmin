@@ -56,7 +56,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		$scope.vm.focus_id = this.x.id;
 		console.log(this)
 	}
-	//编辑
+	//编辑用户
 	$scope.edit = function(){
 //		console.log($scope.vm.focus_id)
 //		console.log($scope.vm.focus_name)
@@ -74,7 +74,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			}
 		)
 	}
-	//创建
+	//创建用户
 	$scope.create = function(){
 //		console.log($scope.vm.focus_name)
 //		console.log($scope.vm.focus_password)
@@ -90,9 +90,9 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			}
 		)
 	}
-	//删除
+	//删除用户
 	$scope.delete = function(){
-		apiServ.post("/api/manager/user/delete",{user_id:$scope.focus_id}).then(
+		apiServ.post("/api/manager/user/delete",{user_id:$scope.vm.focus_id}).then(
 			function(data){
 				console.log(data)
 			},
@@ -113,7 +113,57 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 				console.log("cuowu")
 		}
 	)
-	
-	
-	
+	//orgnization分页功能
+	$scope.orgnizationPage = function(){
+		$scope.arr_orgnization = $scope.aOrgnization.slice((this.currentPage-1)*5,this.currentPage*5)
+	}
+	//组织焦点
+	$scope.o_focus = function(){
+//		console.log(this)
+		$scope.vm.o_name = this.x.name;
+		$scope.vm.o_id = this.x.id;
+	}
+	//创建组织
+	$scope.o_create = function(){
+		console.log($scope.vm.o_name)
+		apiServ.post("/api/manager/orgnization/new",{
+			orgnization_name:$scope.vm.o_name
+		}).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
+	}
+	//删除组织
+	$scope.o_delete = function(){
+		apiServ.post("/api/manager/orgnization/delete",{
+			orgnization_id:$scope.vm.o_id
+		}).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
+	}
+	//修改组织
+	$scope.o_edit = function(){
+//		console.log($scope.vm.o_id)
+//		console.log($scope.vm.o_name)
+		apiServ.post("/api/manager/orgnization/edit",{
+			orgnization_id:$scope.vm.o_id,
+   			orgnization_name:$scope.vm.o_name}
+		).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
+	}
 })

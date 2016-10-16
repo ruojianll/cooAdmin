@@ -56,21 +56,21 @@
 	          			
 						<tr><th>id</th><th>name</th></tr>
 	     
-						<tr ng-repeat="x in arr_orgnization"><td ng-bind="x.id">1</td><td ng-bind="x.name">lilei</td></tr>
+						<tr ng-repeat="x in arr_orgnization" ng-click="o_focus()"><td ng-bind="x.id">1</td><td ng-bind="x.name">lilei</td></tr>
 	          		
 					</table>
-				<ul uib-pagination total-items="orgnizationItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+				<ul uib-pagination total-items="orgnizationItems" ng-model="currentPage" ng-change="orgnizationPage()"></ul>
 			</div>
 			<!--centerbar-->
 			<div class = "centerbar">
 				<span>
 					<b>Name</b>
-					<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">
+					<input type="text" ng-model="vm.o_name" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">
 				</span>
 				<span>
-					<button>Edit</button>
-					<button>Delete</button>
-					<button>Create</button>
+					<button ng-click="o_edit()">Edit</button>
+					<button ng-click="o_delete()">Delete</button>
+					<button ng-click="o_create()">Create</button>
 				</span>					
 			</div>
 			<!--rightbar-->
