@@ -28,7 +28,9 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		}
 }).controller("homeCtrl",function($scope,apiServ,$state){
 	$scope.vm={}
-	
+	var _selected;
+    $scope.selected = undefined;
+    $scope.states = ["two","three"];
 	if(localStorage.user_id && localStorage.web_token){
 
 	}else{
@@ -46,15 +48,41 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 				console.log("cuowu")
 		}
 	)
+	//获取所有组织
+	apiServ.post("/api/manager/orgnization/all",{}).then(
+		function(data){
+			console.log(data)
+			$scope.aOrgnization = data;
+			
+			$scope.orgnizationItems = Math.ceil($scope.aOrgnization.length / 5)*10;
+			$scope.arr_orgnization = $scope.aOrgnization.slice(0,5)
+		},
+		function(err){
+				console.log("cuowu")
+		}
+	)
 	//user分页功能
 	$scope.userPage = function(){
 		$scope.arr_user = $scope.aUser.slice((this.currentPage-1)*5,this.currentPage*5)
 	}
-	//focus焦点
+	//用户焦点
 	$scope.focus = function(){
 		$scope.vm.focus_name = this.x.user_name;
 		$scope.vm.focus_id = this.x.id;
 		console.log(this)
+		apiServ.post("/api/manager/user_orgnization/get",{
+			user_id:$scope.vm.focus_id
+		}).then(
+			function(data){
+				console.log(data)
+//				$scope.user_o用户所在的所有组织
+				$scope.user_o = data;
+			},
+			function(err){
+				console.log(data)
+			}
+		)
+		
 	}
 	//编辑用户
 	$scope.edit = function(){
@@ -101,18 +129,47 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			}
 		)
 	}
-	//获取所有组织
-	apiServ.post("/api/manager/orgnization/all",{}).then(
-		function(data){
-//				console.log(data)
-			$scope.aOrgnization = data;
-			$scope.orgnizationItems = Math.ceil($scope.aOrgnization.length / 5)*10;
-			$scope.arr_orgnization = $scope.aOrgnization.slice(0,5)
-		},
-		function(err){
-				console.log("cuowu")
-		}
-	)
+	//user页面新建组织映射
+	$scope.user_add = function(){
+		apiServ.post("/api/manager/user_orgnization/new",{
+			user_id:$scope.vm.focus_id,
+    		orgnization_id:$scope.vm.id
+		}).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
+	}
+	//删除组织映射
+	$scope.o_del = function(){
+		console.log(this)
+		apiServ.post("/api/manager/user_orgnization/delete",{
+			id:this.x.id
+		}).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
+	}
+	$scope.user_del = function(){
+		console.log(this)
+		apiServ.post("/api/manager/user_orgnization/delete",{
+			id:this.x.id
+		}).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
+	}
 	//orgnization分页功能
 	$scope.orgnizationPage = function(){
 		$scope.arr_orgnization = $scope.aOrgnization.slice((this.currentPage-1)*5,this.currentPage*5)
@@ -122,6 +179,33 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 //		console.log(this)
 		$scope.vm.o_name = this.x.name;
 		$scope.vm.o_id = this.x.id;
+		apiServ.post("/api/manager/user_orgnization/get",{
+			orgnization_id:$scope.vm.o_id
+		}).then(
+			function(data){
+				console.log(data)
+//				$scope.o_user组织的所有用户
+				$scope.o_user = data;
+			},
+			function(err){
+				console.log(data)
+			}
+		)
+	}
+	//组织页面新建组织映射
+	$scope.o_add = function(){
+//		console.log($scope.vm.id)
+		apiServ.post("/api/manager/user_orgnization/new",{
+			user_id:$scope.vm.id,
+    		orgnization_id:$scope.vm.o_id
+		}).then(
+			function(data){
+				console.log(data)
+			},
+			function(err){
+				console.log(err)
+			}
+		)
 	}
 	//创建组织
 	$scope.o_create = function(){
@@ -139,6 +223,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 	}
 	//删除组织
 	$scope.o_delete = function(){
+//		console.log(this)
 		apiServ.post("/api/manager/orgnization/delete",{
 			orgnization_id:$scope.vm.o_id
 		}).then(
@@ -166,4 +251,10 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			}
 		)
 	}
+	//获取所有公告
+//	apiServ.post("/api/manager/board/all",{}).then(
+//		function(data){
+//			$scope.o_board=data;
+//		}
+//	)
 })

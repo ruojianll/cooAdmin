@@ -38,10 +38,10 @@
 					
 					<table border="" cellspacing="" cellpadding="">
 	          			<tr><th>id</th><th>orgnization</th><th>operation</th></tr>
-	          			<tr><td>1</td><td>1231</td><td><em class = "glyphicon glyphicon-remove"></em></td></tr>
+	          			<tr ng-repeat="x in user_o"><td ng-bind="x.orgnization_id">1</td><td ng-bind="x.orgnization_name">1231</td><td><em ng-click="o_del()" class = "glyphicon glyphicon-remove"></em></td></tr>
 	          		</table>
 					<span>
-						<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button class="input btn btn-default">Add</button>
+						<input type="text" placeholder="请输入组织ID" ng-model="vm.id" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button class="input btn btn-default" ng-click="user_add()">Add</button>
 					</span>						
 				</div>
 			</div>    	
@@ -77,10 +77,10 @@
 			<div class = "rightbar">
 				<table border="" cellspacing="" cellpadding="">
 	          			<tr><th>id</th><th>user name</th><th>operation</th></tr>
-	          			<tr><td>1</td><td>lilei</td><td><em class = "glyphicon glyphicon-remove"></em></td></tr>
+	          			<tr ng-repeat="x in o_user"><td ng-bind="x.id">1</td><td ng-bind="x.user_name">lilei</td><td><em ng-click="user_del()" class = "glyphicon glyphicon-remove"></em></td></tr>
 	          		</table>
 				<span>
-					<input type="text" ng-model="selected" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button class="btn btn-default">Add</button>
+					<input type="text" placeholder="请输入用户ID" ng-model="vm.id" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button ng-click="o_add()" class="btn btn-default">Add</button>
 				</span>					
 			</div>
 		</div>    	
@@ -96,10 +96,10 @@
           				<th>type</th>
           				<th>owner</th>
           			</tr>
-          			<tr>
-          				<td>1</td>
-          				<td>board</td>
-          				<td>personal</td>
+          			<tr ng-repeat="x in o_board">
+          				<td ng-bind="x.id">1</td>
+          				<td ng-bind="x.name">board</td>
+          				<td ng-bind="x.type">personal</td>
           				<td>whaha</td>
           			</tr>
           		</table>

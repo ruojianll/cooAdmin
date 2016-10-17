@@ -179,7 +179,7 @@ div.users_list div.leftbar > table > tbody > tr > td{
  div.users_list div.rightbar{
  	/*width:490px;*/
  	width: 39.5%;
- 	height:158px;
+ 	/*height:158px;*/
  	background: rgba(255,255,255,.5);
  	padding: 0.1rem;
  	box-sizing: border-box;
