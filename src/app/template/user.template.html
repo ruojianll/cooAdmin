@@ -96,14 +96,14 @@
           				<th>type</th>
           				<th>owner</th>
           			</tr>
-          			<tr ng-repeat="x in o_board">
+          			<tr ng-repeat="x in arr_board" ng-click="board_focus()">
           				<td ng-bind="x.id">1</td>
           				<td ng-bind="x.name">board</td>
           				<td ng-bind="x.type">personal</td>
-          				<td>whaha</td>
+          				<td ng-bind="x.owner">whaha</td>
           			</tr>
           		</table>
-          		<ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+          		<ul uib-pagination total-items="boardItems" ng-model="currentPage" ng-change="boardPage()"></ul>
 			</div>
 			<!--centerbar-->
 			<div class = "boards_center">
@@ -112,20 +112,18 @@
           				<th>id</th>
           				<th>name</th>
           			</tr>
-          			<tr>
-          				<td>1</td>
-          				<td>1</td>
+          			<tr ng-repeat="x in arr_card" ng-click="card_focus()">
+          				<td ng-bind="x.id">1</td>
+          				<td ng-bind="x.name">1</td>
           			</tr>
           		</table>	
-          		<ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+          		<ul uib-pagination total-items="cardItems" ng-model="currentPage" ng-change="cardPage()"></ul>
 			</div>
 			<!--rightbar-->
 			<div class = "boards_right">
-				<a href="javascript:;"><img src ="../../assets/images/bootstrap.png"/></a>
-				<span>新文本</span>
-				<span>新文本</span>
-				<span>新文本</span>
-				<span>新文本</span>
+				<!--<a href="javascript:;"><img src ="assets/images/bootstrap.png" title=""/></a>-->
+				<!--<span>新文本</span>
+				-->
 				
 			</div>
 		</div>    
