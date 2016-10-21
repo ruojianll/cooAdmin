@@ -30,19 +30,19 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 		<div class="e_login_top_bg"></div>
-		<div class="e_login_top">
+		<div class="e_login_top" ng-controller="init">
 				<i class="logo glyphicon glyphicon-leaf
 "></i>
 				<span class="e_login_btn" uib-dropdown on-toggle="toggled(open)">
-	      <a href id="simple-dropdown" uib-dropdown-toggle>请登录<i class="glyphicon glyphicon-triangle-bottom"></i></a>
-	      <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
-		        <li>
-		          <a ui-sref="login_in">登录</a>
-		        </li>
-	      </ul>
-    </span>
+			      <a href id="simple-dropdown" uib-dropdown-toggle>{{init}}<i class="glyphicon glyphicon-triangle-bottom"></i></a>
+			      <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+				        <li>
+				          <a ng-click="logout()">{{denglu}}</a>
+				        </li>
+			      </ul>
+		    </span>
 		</div>
-    <div class="e_login" ui-view="" ></div>
+    <div class="e_login" ui-view=""></div>
 
     <!-- build:js(src) scripts/vendor.js -->
     <!-- bower:js -->

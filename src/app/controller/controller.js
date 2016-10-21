@@ -1,23 +1,32 @@
-angular.module("cooAdmin").controller("login",function($scope,apiServ,environment,accountServ,$state){
-	   	//login_in 检索功能
-	   	var _selected;
-	    $scope.selected = undefined;
-	    $scope.states = [];
-	  
-		apiServ.post("/api/manager/user/all",{}).then(
+angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountServ,$state){
+	$rootScope.init = "请登录";
+	$rootScope.denglu = "登录"
+	$scope.logout = function(){
+		accountServ.logout();
+		$rootScope.init = "请登录";
+		$rootScope.denglu = "登录";
+		$state.go("login_in")
+	}
+}).controller("login_in",function($scope,apiServ,environment,accountServ,$state,$rootScope){
+	$scope.click = function(){
+		accountServ.login($scope.user_name,$scope.password).then(
 			function(data){
-				for(var x in data){
-					$scope.states.push(data[x].user_name)
-				}
-				console.log($scope.states)
-			},
-			function(err){
-					console.log("cuowu")
+				$rootScope.init = $scope.user_name;
+				$rootScope.denglu = "退出";
+				$state.go("user");
+			},function(err){
+				$scope.user_name = "";
+				$scope.password = "";
+				alert("登录失败,账号或密码错误");
 			}
 		)
-		$scope.click = function(){
+	}
+	document.onkeydown = function(ev){
+		var oEvent = ev || event;
+		if(oEvent.keyCode == 13){
 			accountServ.login($scope.user_name,$scope.password).then(
 				function(data){
+					$rootScope.init = $scope.user_name;
 					$state.go("user");
 				},function(err){
 					$scope.user_name = "";
@@ -26,49 +35,85 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 				}
 			)
 		}
+	}
 }).controller("homeCtrl",function($scope,apiServ,$state){
-	$scope.vm={}
 	var _selected;
-    $scope.selected = undefined;
-    $scope.states = ["two","three"];
+	$scope.selected = undefined;
+	$scope.user_states = [];
+	$scope.o_states = [];
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	$scope.vm={}
 	if(localStorage.user_id && localStorage.web_token){
 
 	}else{
 		$state.go("login")
 	}
-	//获取所有用户
-	apiServ.post("/api/manager/user/all",{}).then(
-		function(data){
-			console.log(data)
-			$scope.aUser = data;
-			$scope.arr_user = $scope.aUser.slice(0,5)
-			$scope.userItems = Math.ceil($scope.aUser.length / 5)*10;
-		},
-		function(err){
-				console.log("cuowu")
-		}
-	)
-	//获取所有组织
-	apiServ.post("/api/manager/orgnization/all",{}).then(
-		function(data){
-			console.log(data)
-			$scope.aOrgnization = data;
-			$scope.orgnizationItems = Math.ceil($scope.aOrgnization.length / 5)*10;
-			$scope.arr_orgnization = $scope.aOrgnization.slice(0,5)
-		},
-		function(err){
-				console.log("cuowu")
-		}
-	)
+	//默认页码
+	$scope.currentPage_user = 1;
+	$scope.currentPage_o = 1;
+	
+	//获取所有用户$scope.get_user
+	$scope.get_user = function(){
+		apiServ.post("/api/manager/user/all").then(
+			function(data){
+				console.log(data)
+				$scope.aUser = data;
+				$scope.userItems = Math.ceil($scope.aUser.length / 5)*10;
+				$scope.arr_user = $scope.aUser.slice(($scope.currentPage_user-1)*5,$scope.currentPage_user*5)
+				for(var i = 0;i < $scope.aUser.length;i++){
+					$scope.user_states.push($scope.aUser[i].id+"_"+$scope.aUser[i].user_name)
+				}
+			},
+			function(err){
+					console.log("cuowu")
+			}
+		)
+	}
+	$scope.get_user();
+	
+	//获取所有组织$scope.get_o
+	$scope.get_o = function(){
+		apiServ.post("/api/manager/orgnization/all",{}).then(
+			function(data){
+				console.log(data)
+				$scope.aOrgnization = data;
+				$scope.orgnizationItems = Math.ceil($scope.aOrgnization.length / 5)*10;
+				$scope.arr_orgnization = $scope.aOrgnization.slice(($scope.currentPage_o-1)*5,$scope.currentPage_o*5);
+				for(var i = 0;i < $scope.aOrgnization.length;i++){
+					$scope.o_states.push($scope.aOrgnization[i].id+"_"+$scope.aOrgnization[i].name)
+				}
+			},
+			function(err){
+					console.log("cuowu")
+			}
+		)
+	}
+	$scope.get_o();
 	//user分页功能
 	$scope.userPage = function(){
-		$scope.arr_user = $scope.aUser.slice((this.currentPage-1)*5,this.currentPage*5)
-	}
-	//用户焦点
-	$scope.focus = function(){
-		$scope.vm.focus_name = this.x.user_name;
-		$scope.vm.focus_id = this.x.id;
 		console.log(this)
+		$scope.currentPage_user = this.currentPage_user;
+		$scope.arr_user = $scope.aUser.slice((this.currentPage_user-1)*5,this.currentPage_user*5)
+	}
+	//获取用户组织映射
+	$scope.get_user_orgnization = function(){
 		apiServ.post("/api/manager/user_orgnization/get",{
 			user_id:$scope.vm.focus_id
 		}).then(
@@ -81,6 +126,13 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 				console.log(data)
 			}
 		)
+	}
+	//用户焦点
+	$scope.focus = function(){
+		$scope.vm.focus_name = this.x.user_name;
+		$scope.vm.focus_id = this.x.id;
+//		console.log(this)
+		$scope.get_user_orgnization();
 		
 	}
 	//编辑用户
@@ -95,6 +147,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_user();
 			},
 			function(err){
 				console.log(err)
@@ -111,6 +164,9 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_user();
+				$scope.vm.focus_name = "";
+				$scope.vm.focus_password = "";
 			},
 			function(err){
 				console.log(err)
@@ -118,10 +174,13 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		)
 	}
 	//删除用户
-	$scope.delete = function(){
+	$scope.delete = function(del){
 		apiServ.post("/api/manager/user/delete",{user_id:$scope.vm.focus_id}).then(
 			function(data){
-				console.log(data)
+				console.log(data);
+				$scope.vm.focus_name = "";
+				$scope.vm.focus_id = "";
+				$scope.get_user()
 			},
 			function(err){
 				console.log(err)
@@ -132,10 +191,12 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 	$scope.user_add = function(){
 		apiServ.post("/api/manager/user_orgnization/new",{
 			user_id:$scope.vm.focus_id,
-    		orgnization_id:$scope.vm.id
+    		orgnization_id:$scope.vm.o_id.split("_")[0]
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_user_orgnization();
+				$scope.vm.o_id = "";
 			},
 			function(err){
 				console.log(err)
@@ -150,6 +211,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_user_orgnization();
 			},
 			function(err){
 				console.log(err)
@@ -163,6 +225,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_orgnization_user();
 			},
 			function(err){
 				console.log(err)
@@ -171,13 +234,11 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 	}
 	//orgnization分页功能
 	$scope.orgnizationPage = function(){
-		$scope.arr_orgnization = $scope.aOrgnization.slice((this.currentPage-1)*5,this.currentPage*5)
+		$scope.currentPage_o = this.currentPage_o;
+		$scope.arr_orgnization = $scope.aOrgnization.slice((this.currentPage_o-1)*5,this.currentPage_o*5)
 	}
-	//组织焦点
-	$scope.o_focus = function(){
-//		console.log(this)
-		$scope.vm.o_name = this.x.name;
-		$scope.vm.o_id = this.x.id;
+	//获取组织用户映射
+	$scope.get_orgnization_user = function(){
 		apiServ.post("/api/manager/user_orgnization/get",{
 			orgnization_id:$scope.vm.o_id
 		}).then(
@@ -191,15 +252,25 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			}
 		)
 	}
+	//组织焦点
+	$scope.o_focus = function(){
+//		console.log(this)
+		$scope.vm.o_name = this.x.name;
+		$scope.vm.o_id = this.x.id;
+		
+		$scope.get_orgnization_user();
+	}
 	//组织页面新建组织映射
 	$scope.o_add = function(){
 //		console.log($scope.vm.id)
 		apiServ.post("/api/manager/user_orgnization/new",{
-			user_id:$scope.vm.id,
+			user_id:$scope.vm.user_id,
     		orgnization_id:$scope.vm.o_id
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_orgnization_user();
+				$scope.vm.user_id = "";
 			},
 			function(err){
 				console.log(err)
@@ -214,6 +285,8 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		}).then(
 			function(data){
 				console.log(data)
+				$scope.get_o();
+				$scope.vm.o_name = '';
 			},
 			function(err){
 				console.log(err)
@@ -227,7 +300,10 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 			orgnization_id:$scope.vm.o_id
 		}).then(
 			function(data){
-				console.log(data)
+				console.log(data);
+				$scope.vm.o_name = "";
+				$scope.vm.o_id = "";
+				$scope.get_o();
 			},
 			function(err){
 				console.log(err)
@@ -244,6 +320,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		).then(
 			function(data){
 				console.log(data)
+				$scope.get_o();
 			},
 			function(err){
 				console.log(err)
@@ -284,7 +361,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 	)
 	//board分页
 	$scope.boardPage = function(){
-		$scope.arr_board = $scope.board.slice((this.currentPage-1)*5,this.currentPage*5)
+		$scope.arr_board = $scope.board.slice((this.currentPage_board-1)*5,this.currentPage_board*5)
 	}
 	//board焦点
 	$scope.board_focus = function(){
@@ -304,7 +381,7 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 	}
 	//card分页
 	$scope.cardPage = function(){
-		$scope.arr_card = $scope.card.slice((this.currentPage-1)*5,this.currentPage*5)
+		$scope.arr_card = $scope.card.slice((this.currentPage_card-1)*5,this.currentPage_card*5)
 	}
 	//card焦点
 	$scope.card_focus = function(){
@@ -313,11 +390,11 @@ angular.module("cooAdmin").controller("login",function($scope,apiServ,environmen
 		apiServ.post("/api/manager/item/get",{card_id:$scope.card_id}).then(
 			function(data){
 				console.log(data)
+				$scope.items = data;
 				var tmpData = [];
 				var _html = "";
 				for(var i = 0;i < data.length;i++){
 					tmpData = eval('('+data[i].data+')');
-//					alert(tmpData.data.url)
 					if(tmpData.type == "image"){
 						_html += '<a href="javascript:;"><img src ="'+tmpData.data.url+'" title="'+tmpData.data.title+'"/></a>'
 					}else if(tmpData.type == "text"){

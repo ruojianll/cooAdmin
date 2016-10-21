@@ -13,13 +13,6 @@
   width: 50px;
 }
 
-/*	滚动条样式 	*/
-
-::-webkit-scrollbar {    width: 0.1rem;}
-::-webkit-scrollbar-track{border-radius: 5px; }
-::-webkit-scrollbar-thumb{
-	background: #424242;border-radius: 0.1rem;border: 1px solid #E1E1E3;
-}
 
 /*	login页	*/
 .e_login{

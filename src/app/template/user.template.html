@@ -15,7 +15,7 @@
 						<tr ng-repeat="x in arr_user" ng-click="focus()"><td ng-bind="x.id">1</td><td ng-bind="x.user_name">lilei</td></tr>
 	          		
 					</table>
-					<ul uib-pagination total-items="userItems" ng-model="currentPage" ng-change="userPage()"></ul>
+					<ul uib-pagination total-items="userItems" ng-model="currentPage_user" ng-change="userPage()" max-size="3" boundary-link-numbers="true" ></ul>
 				</div>
 				<!--centerbar-->
 				<div class = "centerbar">
@@ -29,7 +29,7 @@
 					</span>
 					<span>
 						<button ng-click="edit()">Edit</button>
-						<button ng-click="delete()">Delete</button>
+						<button ng-click="delete(x)">Delete</button>
 						<button ng-click="create()">Create</button>
 					</span>					
 				</div>
@@ -41,7 +41,7 @@
 	          			<tr ng-repeat="x in user_o"><td ng-bind="x.orgnization_id">1</td><td ng-bind="x.orgnization_name">1231</td><td><em ng-click="o_del()" class = "glyphicon glyphicon-remove"></em></td></tr>
 	          		</table>
 					<span>
-						<input type="text" placeholder="请输入组织ID" ng-model="vm.id" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button class="input btn btn-default" ng-click="user_add()">Add</button>
+						<input type="text" ng-model="vm.o_id" uib-typeahead="state for state in o_states | filter:$viewValue | limitTo:8" class="form-control"><button class="input btn btn-default" ng-click="user_add()">Add</button>
 					</span>						
 				</div>
 			</div>    	
@@ -59,7 +59,7 @@
 						<tr ng-repeat="x in arr_orgnization" ng-click="o_focus()"><td ng-bind="x.id">1</td><td ng-bind="x.name">lilei</td></tr>
 	          		
 					</table>
-				<ul uib-pagination total-items="orgnizationItems" ng-model="currentPage" ng-change="orgnizationPage()"></ul>
+				<ul uib-pagination total-items="orgnizationItems" ng-model="currentPage_o" ng-change="orgnizationPage()"></ul>
 			</div>
 			<!--centerbar-->
 			<div class = "centerbar">
@@ -80,7 +80,7 @@
 	          			<tr ng-repeat="x in o_user"><td ng-bind="x.id">1</td><td ng-bind="x.user_name">lilei</td><td><em ng-click="user_del()" class = "glyphicon glyphicon-remove"></em></td></tr>
 	          		</table>
 				<span>
-					<input type="text" placeholder="请输入用户ID" ng-model="vm.id" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control"><button ng-click="o_add()" class="btn btn-default">Add</button>
+					<input type="text" ng-model="vm.user_id" uib-typeahead="state for state in user_states | filter:$viewValue | limitTo:8" class="form-control"><button ng-click="o_add()" class="btn btn-default">Add</button>
 				</span>					
 			</div>
 		</div>    	
@@ -103,7 +103,7 @@
           				<td ng-bind="x.owner">whaha</td>
           			</tr>
           		</table>
-          		<ul uib-pagination total-items="boardItems" ng-model="currentPage" ng-change="boardPage()"></ul>
+          		<ul uib-pagination total-items="boardItems" ng-model="currentPage_board" ng-change="boardPage()" max-size="3" boundary-link-numbers="true"></ul>
 			</div>
 			<!--centerbar-->
 			<div class = "boards_center">
@@ -117,14 +117,13 @@
           				<td ng-bind="x.name">1</td>
           			</tr>
           		</table>	
-          		<ul uib-pagination total-items="cardItems" ng-model="currentPage" ng-change="cardPage()"></ul>
+          		<ul uib-pagination total-items="cardItems" ng-model="currentPage_card" ng-change="cardPage()"></ul>
 			</div>
 			<!--rightbar-->
-			<div class = "boards_right">
+			<div class = "boards_right" ng-nicescroll>
 				<!--<a href="javascript:;"><img src ="assets/images/bootstrap.png" title=""/></a>-->
 				<!--<span>新文本</span>
 				-->
-				
 			</div>
 		</div>    
       </uib-tab>

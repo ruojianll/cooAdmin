@@ -2,6 +2,6 @@
   'use strict';
 
   angular
-    .module('cooAdmin', ['ui.router', 'ui.bootstrap', 'toastr']);
+    .module('cooAdmin', ['ui.router', 'ui.bootstrap', 'toastr','angular-nicescroll']);
 
 })();
