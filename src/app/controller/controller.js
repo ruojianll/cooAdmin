@@ -4,6 +4,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.logout = function(){
 		accountServ.logout();
 		$rootScope.init = "请登录";
+		localStorage.removeItem("user_name")
 		$rootScope.denglu = "登录";
 		$state.go("login_in")
 	}
@@ -11,7 +12,8 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.click = function(){
 		accountServ.login($scope.user_name,$scope.password).then(
 			function(data){
-				$rootScope.init = $scope.user_name;
+				localStorage.user_name = $scope.user_name;
+				$rootScope.init = localStorage.user_name;
 				$rootScope.denglu = "退出";
 				$state.go("user");
 			},function(err){
@@ -26,7 +28,8 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 		if(oEvent.keyCode == 13){
 			accountServ.login($scope.user_name,$scope.password).then(
 				function(data){
-					$rootScope.init = $scope.user_name;
+					localStorage.user_name = $scope.user_name;
+					$rootScope.init = localStorage.user_name;
 					$state.go("user");
 				},function(err){
 					$scope.user_name = "";
@@ -36,32 +39,15 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 			)
 		}
 	}
-}).controller("homeCtrl",function($scope,apiServ,$state){
+}).controller("homeCtrl",function($scope,apiServ,$state,$rootScope){
 	var _selected;
 	$scope.selected = undefined;
 	$scope.user_states = [];
 	$scope.o_states = [];
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	$scope.vm={}
 	if(localStorage.user_id && localStorage.web_token){
-
+		$rootScope.init = localStorage.user_name;
+		$rootScope.denglu = "退出";
 	}else{
 		$state.go("login")
 	}
@@ -73,7 +59,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.get_user = function(){
 		apiServ.post("/api/manager/user/all").then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.aUser = data;
 				$scope.userItems = Math.ceil($scope.aUser.length / 5)*10;
 				$scope.arr_user = $scope.aUser.slice(($scope.currentPage_user-1)*5,$scope.currentPage_user*5)
@@ -92,7 +78,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.get_o = function(){
 		apiServ.post("/api/manager/orgnization/all",{}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.aOrgnization = data;
 				$scope.orgnizationItems = Math.ceil($scope.aOrgnization.length / 5)*10;
 				$scope.arr_orgnization = $scope.aOrgnization.slice(($scope.currentPage_o-1)*5,$scope.currentPage_o*5);
@@ -108,7 +94,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.get_o();
 	//user分页功能
 	$scope.userPage = function(){
-		console.log(this)
+//		console.log(this)
 		$scope.currentPage_user = this.currentPage_user;
 		$scope.arr_user = $scope.aUser.slice((this.currentPage_user-1)*5,this.currentPage_user*5)
 	}
@@ -118,7 +104,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 			user_id:$scope.vm.focus_id
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 //				$scope.user_o用户所在的所有组织
 				$scope.user_o = data;
 			},
@@ -133,7 +119,6 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 		$scope.vm.focus_id = this.x.id;
 //		console.log(this)
 		$scope.get_user_orgnization();
-		
 	}
 	//编辑用户
 	$scope.edit = function(){
@@ -146,7 +131,8 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 		    user_password:$scope.vm.focus_password
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
+				$scope.vm.focus_password = "";
 				$scope.get_user();
 			},
 			function(err){
@@ -163,7 +149,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 			user_password:$scope.vm.focus_password 
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.get_user();
 				$scope.vm.focus_name = "";
 				$scope.vm.focus_password = "";
@@ -177,10 +163,27 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.delete = function(del){
 		apiServ.post("/api/manager/user/delete",{user_id:$scope.vm.focus_id}).then(
 			function(data){
-				console.log(data);
+//				console.log(data);
+//				console.log($scope.user_o)
+				for(var i = 0;i < $scope.user_o.length;i++){
+					apiServ.post("/api/manager/user_orgnization/delete",{
+						id:$scope.user_o[i].id
+					}).then(
+						function(data){
+//							console.log(data)
+							if(i >= $scope.user_o.length){
+								$scope.get_user_orgnization();
+								$scope.get_orgnization_user();
+							}
+						},
+						function(err){
+							console.log(err)
+						}
+					)
+				}
 				$scope.vm.focus_name = "";
 				$scope.vm.focus_id = "";
-				$scope.get_user()
+				$scope.get_user();
 			},
 			function(err){
 				console.log(err)
@@ -194,7 +197,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
     		orgnization_id:$scope.vm.o_id.split("_")[0]
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.get_user_orgnization();
 				$scope.vm.o_id = "";
 			},
@@ -203,14 +206,14 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 			}
 		)
 	}
-	//删除组织映射
+	//删除用户组织映射
 	$scope.o_del = function(){
-		console.log(this)
+//		console.log(this)
 		apiServ.post("/api/manager/user_orgnization/delete",{
 			id:this.x.id
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.get_user_orgnization();
 			},
 			function(err){
@@ -218,13 +221,14 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 			}
 		)
 	}
+	//删除组织用户
 	$scope.user_del = function(){
-		console.log(this)
+//		console.log(this)
 		apiServ.post("/api/manager/user_orgnization/delete",{
 			id:this.x.id
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.get_orgnization_user();
 			},
 			function(err){
@@ -240,10 +244,10 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	//获取组织用户映射
 	$scope.get_orgnization_user = function(){
 		apiServ.post("/api/manager/user_orgnization/get",{
-			orgnization_id:$scope.vm.o_id
+			orgnization_id:$scope.vm.o_focus_id
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 //				$scope.o_user组织的所有用户
 				$scope.o_user = data;
 			},
@@ -254,10 +258,8 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	}
 	//组织焦点
 	$scope.o_focus = function(){
-//		console.log(this)
 		$scope.vm.o_name = this.x.name;
-		$scope.vm.o_id = this.x.id;
-		
+		$scope.vm.o_focus_id = this.x.id;
 		$scope.get_orgnization_user();
 	}
 	//组织页面新建组织映射
@@ -265,10 +267,10 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 //		console.log($scope.vm.id)
 		apiServ.post("/api/manager/user_orgnization/new",{
 			user_id:$scope.vm.user_id,
-    		orgnization_id:$scope.vm.o_id
+    		orgnization_id:$scope.vm.o_focus_id
 		}).then(
 			function(data){
-				console.log(data)
+//				console.log(data)
 				$scope.get_orgnization_user();
 				$scope.vm.user_id = "";
 			},
@@ -279,7 +281,7 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	}
 	//创建组织
 	$scope.o_create = function(){
-		console.log($scope.vm.o_name)
+//		console.log($scope.vm.o_name)
 		apiServ.post("/api/manager/orgnization/new",{
 			orgnization_name:$scope.vm.o_name
 		}).then(
@@ -297,10 +299,26 @@ angular.module("cooAdmin").controller("init",function($scope,$rootScope,accountS
 	$scope.o_delete = function(){
 //		console.log(this)
 		apiServ.post("/api/manager/orgnization/delete",{
-			orgnization_id:$scope.vm.o_id
+			orgnization_id:$scope.vm.o_focus_id
 		}).then(
 			function(data){
 				console.log(data);
+				for(var i = 0;i < $scope.o_user.length;i++){
+					apiServ.post("/api/manager/user_orgnization/delete",{
+						id:$scope.o_user[i].id
+					}).then(
+						function(data){
+							console.log(data)
+							if(i >= $scope.o_user.length){
+								$scope.get_user_orgnization();
+								$scope.get_orgnization_user();
+							}
+						},
+						function(err){
+							console.log(err)
+						}
+					)
+				}
 				$scope.vm.o_name = "";
 				$scope.vm.o_id = "";
 				$scope.get_o();
